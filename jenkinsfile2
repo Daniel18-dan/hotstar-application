@@ -40,30 +40,33 @@ pipeline {
         }
 
         stage('OWASP FS SCAN') {
-            steps {
-                script {
-                    echo "=== Updating OWASP Dependency-Check Database ==="
-                    // Update the NVD data to avoid "No documents exist" errors
-                    sh 'dependency-check.sh --updateOnly || true'
+         steps {
+           script {
+            echo "=== Updating OWASP Dependency-Check Database ==="
+            sh 'dependency-check.sh --updateOnly || true'
 
-                    echo "=== Running OWASP Dependency-Check Scan ==="
-                    // Run the actual scan and handle transient failures gracefully
-                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                        dependencyCheck additionalArguments: '''
-                            --scan ./ \
-                            --disableYarnAudit \
-                            --disableNodeAudit \
-                            --format XML \
-                            --nvdApiKey EF38C1AE-2CC0-F011-8364-0EBF96DE670D
-                        ''', odcInstallation: 'DC', failBuildOnCVSS: 0
+            echo "=== Running OWASP Dependency-Check Scan ==="
+            catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                // Run scan and explicitly define report output
+                sh '''
+                    dependency-check.sh \
+                    --scan ./ \
+                    --disableYarnAudit \
+                    --disableNodeAudit \
+                    --format XML \
+                    --out . \
+                    --nvdApiKey EF38C1AE-2CC0-F011-8364-0EBF96DE670D
+                '''
+                  }
 
-                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                    }
+            // Make sure Jenkins can find the report
+            dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
 
-                    echo "=== OWASP Dependency-Check Completed ==="
-                }
-            }
+            echo "=== OWASP Dependency-Check Completed ==="
         }
+    }
+}
+
 
         stage('TRIVY FS SCAN') {
             steps {
