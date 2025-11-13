@@ -62,7 +62,7 @@ pipeline{
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image sarvjeet908/hotstar:latest > trivyimage.txt" 
+                sh "trivy image sarvjeet908/hotstar:2 > trivyimage.txt" 
             }
         }
         stage('Deploy to container'){
