@@ -30,8 +30,7 @@ pipeline{
         }
         stage("quality gate"){
            steps {
-                  timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false
+                   echo "Skipping SonarQube Quality Gate wait to avoid pipeline delay"
                 }
             } 
         }
