@@ -56,7 +56,7 @@ pipeline {
 // --- OWASP FS SCAN temporarily disabled ---
 // stage('OWASP FS SCAN') {
 //     steps {
-//         dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey D6CCE674-B4BF-F011-8364-0EBF96DE670D', odcInstallation: 'DC'
+//         dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey 7D78E0BF-88EF-F011-8366-0EBF96DE670D', odcInstallation: 'DC'
 //         dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
 //     }
 // }
