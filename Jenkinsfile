@@ -42,7 +42,7 @@ pipeline{
         }
         stage('OWASP FS SCAN') {
             steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey   EF38C1AE-2CC0-F011-8364-0EBF96DE670D', odcInstallation: 'DC'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit --nvdApiKey   7D78E0BF-88EF-F011-8366-0EBF96DE670D', odcInstallation: 'DC'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
            }
         }
@@ -56,20 +56,20 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                        sh "docker build -t hotstar ."
-                       sh "docker tag hotstar sarvjeet908/hotstar:2 "
-                       sh "docker push sarvjeet908/hotstar:2 "
+                       sh "docker tag hotstar danielbernard/hotstar:2 "
+                       sh "docker push danielbernard/hotstar:2 "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image sarvjeet908/hotstar:2 > trivyimage.txt" 
+                sh "trivy image danielbernard/hotstar:2 > trivyimage.txt" 
             }
         }
       /*  stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name hotstar -p 80:80 sarvjeet908/hotstar:2'
+                sh 'docker run -d --name hotstar -p 80:80 danielbernard/hotstar:2'
             }
         }
      * /
@@ -111,9 +111,9 @@ pipeline{
                     <p>Started by: ${buildUser}</p>
                     <p>Build URL: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
-                to: 'sarvjeet908@gmail.com',
-                from: 'sarvjeet908@gmail.com',
-                replyTo: 'sarvjeet908@gmail.com',
+                to: 'bernarddaniel171@gmail.com',
+                from: 'bernarddaniel171@gmail.com',
+                replyTo: 'bernarddaniel171@gmail.com',
                 mimeType: 'text/html',
                 attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
             )
